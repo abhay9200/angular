@@ -1,0 +1,149 @@
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <h4 class="page-title">Dashboard</h4>
+    </div>
+  
+</div>
+<!-- Row -->
+<div class="row dashboard_card">
+<div class="col-xl-2 col-lg-6 col-md-6">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    <div class="mt-0 text-start">
+                        <span class="font-weight-semibold">Active Leads</span>
+                        <h3 class="mb-0 mt-1 text-success mb-2">185</h3>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="icon1 bg-success my-auto float-end"><i class="las la-users"></i></div>
+                </div>
+            </div></div></div></div>
+            
+            <div class="col-xl-2 col-lg-6 col-md-6"><div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="mt-0 text-start"><span class="font-weight-semibold">Applicants</span>
+                                <h3 class="mb-0 mt-1 text-secondary mb-2">46</h3></div>
+                            </div>
+                            <div class="col-4">
+                                <div class="icon1 bg-secondary my-auto float-end"><i class="las la-user"></i></div>
+                            </div></div></div></div></div>
+                            <div class="col-xl-2 col-lg-6 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="mt-0 text-start"><span class="font-weight-semibold">Interviews</span>
+                                                <h3 class="mb-0 mt-1 text-default mb-2">0</h3></div></div>
+                                                <div class="col-4"><div class="icon1 bg-default my-auto float-end"><i class="las la-users"></i></div></div>
+                                            </div></div></div></div>
+
+                            <div class="col-xl-2 col-lg-6 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-8"><div class="mt-0 text-start"><span class="font-weight-semibold">Submissions</span>
+                                                <h3 class="mb-0 mt-1 text-primary mb-2">7</h3></div></div>
+                                                <div class="col-4"><div class="icon1 bg-primary my-auto float-end"><i class="las la-file"></i></div></div></div></div></div></div>
+
+                                                <div class="col-xl-2 col-lg-6 col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-8"><div class="mt-0 text-start"><span class="font-weight-semibold">Active Jobs</span>
+                                                                    <h3 class="mb-0 mt-1 text-success mb-2">18</h3></div></div>
+                                                                    <div class="col-4"><div class="icon1 bg-success my-auto float-end"><i class="las la-briefcase"></i></div></div></div></div></div></div>
+                                                                
+
+                           
+                                            
+                
+                                                                                </div>
+
+ <div class="row">
+    <div class="col-xl-9 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header border-0 responsive-header">
+                <h4 class="card-title">Active Applicants (Pipeline)</h4>
+            </div>
+            <div class="card-body" style="height:315px">
+                pipeline design 
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-12 col-lg-12">
+        <div class="card" style="background: #023047;">
+            <div class="card-header border-0 responsive-header">
+                <h4 class="card-title" style="color:#fff !important">Open Task</h4>
+            </div>
+            <div class="card-body open-task-box">
+                <div class="mb-5">
+                    <div class="d-flex p-0 align-items-center border-0">
+                        <div class="d-flex">
+                           <div class="mt-1"><h6 class="mb-1 font-weight-semibold fs-16">Faith Harrits <span class="font-weight-normal">Completed Project</span> Ui Development </h6>
+                                </div></div></div></div>
+
+                                <div class="mb-5">
+                                    <div class="d-flex p-0 align-items-center border-0">
+                                        <div class="d-flex">
+                                           <div class="mt-1"><h6 class="mb-1 font-weight-semibold fs-16">Faith Harrits <span class="font-weight-normal">Completed Project</span> Ui Development </h6>
+                                                </div></div></div></div>
+
+                                                <div class="mb-5">
+                                                    <div class="d-flex p-0 align-items-center border-0">
+                                                        <div class="d-flex">
+                                                           <div class="mt-1"><h6 class="mb-1 font-weight-semibold fs-16">Faith Harrits <span class="font-weight-normal">Completed Project</span> Ui Development </h6>
+                                                      </div></div></div></div>
+
+                                                      <div class="mb-5">
+                                                        <div class="d-flex p-0 align-items-center border-0">
+                                                            <div class="d-flex">
+                                                               <div class="mt-1"><h6 class="mb-1 font-weight-semibold fs-16">Faith Harrits <span class="font-weight-normal">Completed Project</span> Ui Development </h6>
+                                                          </div></div></div></div>
+
+                                                                
+                                
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+ <div class="row">
+    <div class="col-xl-6 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header border-0 responsive-header">
+                <h4 class="card-title">Submission by Day</h4>
+            </div>
+            <div class="card-body" style="height:315px">
+             
+                    <apx-chart [series]="RandomData.series" [chart]="RandomData.chart"
+                        [annotations]="RandomData.annotations" [colors]="RandomData.colors"
+                        [dataLabels]="RandomData.dataLabels" [markers]="RandomData.markers" [xaxis]="RandomData.xaxis"
+                        [tooltip]="RandomData.tooltip" [fill]="RandomData.fill"></apx-chart>
+          
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6 col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header border-0 responsive-header">
+                <h4 class="card-title" >Lead Status</h4>
+            </div>
+            <div class="card-body" style="height:315px">
+               
+                <apx-chart [series]="donutData.pieseries" [colors]="donutData.colors" [chart]="donutData.chart"
+                [responsive]="donutData.responsive" [legend]="donutData.legend"></apx-chart>
+                                                                
+                                
+            </div>
+        </div>
+    </div>
+ </div>
+
+<!-- End Row-->
