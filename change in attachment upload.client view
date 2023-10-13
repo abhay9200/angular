@@ -1,0 +1,21 @@
+ uploadFile(referenceId: string, fileType: string, file: File, descr: string) {
+    if (
+      (referenceId != undefined && referenceId != '') &&
+      (fileType != undefined && fileType != '') && file != undefined
+    ) {
+      const formData = new FormData();
+      formData.append(`referenceId`, referenceId);
+      formData.append(`description`, descr);
+      formData.append(`${fileType}`, file);
+      return this.http
+        .post<ApiResponse>(
+          this.baseUrl + `FileUpload/CandidateAttachments`,
+          formData
+        )
+        .pipe(catchError(this.handleError));
+    }
+    else {
+      return null;
+    }
+
+  }
