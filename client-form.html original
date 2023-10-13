@@ -1,0 +1,486 @@
+<div class="page-header d-xl-flex d-block">
+    <div class="page-leftheader">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style2 mb-0 p-0">
+                <li class="breadcrumb-item">
+                    <a routerLink="javascript:;"><i class="feather feather-home"></i> Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a routerLink="/clients"><i class="feather feather-user"></i> Clients</a>
+                </li>
+                <li class="breadcrumb-item active">Client Form</li>
+            </ol>
+        </nav>
+        <h4 class="page-title">Add Client</h4>
+
+    </div>
+    <div class="page-rightheader">
+    </div>
+
+</div>
+<!-- Row -->
+<form [formGroup]="clientForm" (ngSubmit)="submitClientDetail()">
+    <div class="row">
+        <div class="col-md-12">
+            <ngb-accordion #acc="ngbAccordion" class="card" activeIds="ngb-panel-0">
+                <ngb-panel title="Client Information" cardClass="">
+                    <ng-template ngbPanelContent>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Account Name<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.accountname.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.accountname.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="text" formControlName="accountname" placeholder="Enter account name"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.accountname.errors }">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Parent Account
+                                        <small *ngIf="formSubmitted && cf.parentaccount.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.parentaccount.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="text" placeholder="Enter parent account"
+                                        formControlName="parentaccount" class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.parentaccount.errors }">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Zipcode<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.zipCode.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.zipCode.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="text" formControlName="zipCode" placeholder="Enter zipcode"
+                                        (change)="onZipChange($event)" class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.zipCode.errors }" />
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Country<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.country.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.country.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select #country class="form-control custom-select"
+                                        (change)="onCountryChange($event)" [searchable]="true"
+                                        [(ngModel)]="countrySelected" formControlName="country"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.country.errors }">
+                                        <ng-option *ngFor="let country of countryCode;  let i = index"
+                                            [value]="country">
+                                            <img src="./assets/images/flags/{{country}}.svg" width="20px"
+                                                height="20px" />
+                                            <b> &nbsp;{{countryName[i]}}</b>
+                                        </ng-option>
+                                    </ng-select>
+
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">State<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.state.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.state.errors.required">&nbsp; Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select #select [items]="stateList" [loading]="stateLoading"
+                                        loadingText='Loading...' class="form-control custom-select" [searchable]="true"
+                                        [(ngModel)]="stateSelected" (change)="onStateChange($event)"
+                                        bindLabel="stateName" bindValue="stateCode" formControlName="state"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.state.errors }">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">City<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.city.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.city.errors.required">&nbsp; Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select #select [items]="cityList" [loading]="cityLoading"
+                                        loadingText='Loading...' class="form-control custom-select" [searchable]="true"
+                                        [(ngModel)]="citySelected" (change)="onCityChange($event)" bindLabel="cityName"
+                                        bindValue="cityName" formControlName="city"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.city.errors }">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Phone<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.phone.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.phone.errors.required">&nbsp; Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ngx-intl-tel-input
+                                        [preferredCountries]="[CountryISO.UnitedStates, CountryISO.UnitedKingdom]"
+                                        [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India"
+                                        [phoneValidation]="true" formControlName="phone"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.phone.errors }">
+                                    </ngx-intl-tel-input>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Alternate Phone</label>
+                                    <ngx-intl-tel-input
+                                        [preferredCountries]="[CountryISO.UnitedStates, CountryISO.UnitedKingdom]"
+                                        [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.India"
+                                        [phoneValidation]="true" formControlName="alternatePhone"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.phone.errors }">
+                                    </ngx-intl-tel-input>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Personal Email<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.email.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.email.errors.required">&nbsp; Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="email" formControlName="email" placeholder="Enter email"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.email.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Alternate Email</label>
+                                    <input type="email" formControlName="alternateEmail" placeholder="Enter email"
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Work Email 1<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.workEmail.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.workEmail.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="email" formControlName="workEmail" placeholder="Enter work email"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.workEmail.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Work Email 2</label>
+                                    <input type="email" formControlName="alternateworkEmail"
+                                        placeholder="Enter work email" class="form-control">
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+
+            <ngb-accordion #acc="ngbAccordion" class="card" activeIds="ngb-panel-1">
+                <ngb-panel title="10Points Information" cardClass="">
+                    <ng-template ngbPanelContent>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Account Id</label>
+                                    <input type="text" placeholder="9458698578945" formControlName="accountID"
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Account Status<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.accountStatus.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.accountStatus.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select formControlName="accountStatus"
+                                        class="SlectBox form-control custom-select"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.accountStatus.errors }">
+                                        <!--placeholder-->
+                                        <ng-option value="">Select</ng-option>
+                                        <ng-option value="">Engaged</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Account Manager</label>
+                                    <input type="text" placeholder="User" formControlName="accountManager"
+                                        class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Tag<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.tag.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.tag.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select formControlName="tag" class="SlectBox form-control custom-select"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.tag.errors }">
+                                        <!--placeholder-->
+                                        <ng-option value="">Select</ng-option>
+                                        <ng-option value="">Cold Call</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Last Engaged on<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.lastEngagedOn.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.lastEngagedOn.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="date" placeholder="dd/mm/yyyy" formControlName="lastEngagedOn"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.lastEngagedOn.errors }">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Last Engaged By<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.lastEngagedBy.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.lastEngagedBy.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="date" placeholder="dd/mm/yyyy" formControlName="lastEngagedBy"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.lastEngagedBy.errors }">
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">Notes<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.note.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.note.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <textarea class="form-control" formControlName="note"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.note.errors }"></textarea>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+            <ngb-accordion #acc="ngbAccordion" class="card" activeIds="ngb-panel-2">
+                <ngb-panel title="Public Profile" cardClass="">
+                    <ng-template ngbPanelContent>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">LinkedIn Profile</label>
+                                    <input type="text" placeholder="LinkedIn Profile" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">Indeed Profile</label>
+                                    <input type="text" placeholder="Indeed Profile" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">Monster Profile</label>
+                                    <input type="text" placeholder="Monster Profile" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="form-label">School Spring Profile</label>
+                                    <input type="text" placeholder="School Spring Profile" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+
+            <ngb-accordion #acc="ngbAccordion" class="card" activeIds="ngb-panel-3">
+                <ngb-panel title="Contracts" cardClass="">
+                    <ng-template ngbPanelContent>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Document Name<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.documentName.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.documentName.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="text" placeholder="Enter document name" formControlNmae="documentName"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.documentName.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Created By<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.createdBy.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.createdBy.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="text" placeholder="User" formControlNmae="createdBy"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.createdBy.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Created on<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.createdOn.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.createdOn.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <input type="date" placeholder="dd/mm/yyyy" formControlNmae="createdOn"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.createdOn.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Approved By<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.approvedBy.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.approvedBy.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select class="SlectBox form-control custom-select" formControlNmae="approvedBy"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.approvedBy.errors }">
+                                        <!--placeholder-->
+                                        <ng-option value="">-</ng-option>
+                                        <ng-option value="">-</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Approved On<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.approvedOn.errors"
+                                            class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.approvedOn.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+
+                                    </label>
+                                    <input type="date" placeholder="dd/mm/yyyy" formControlNmae="approvedOn"
+                                        class="form-control"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.approvedOn.errors }">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="form-label">Status<sup class="text-danger">*</sup>
+                                        <small *ngIf="formSubmitted && cf.status.errors" class="pull-right text-danger">
+                                            <span class="error-message" *ngIf="cf.status.errors.required">&nbsp;
+                                                Required
+                                            </span>
+                                        </small>
+                                    </label>
+                                    <ng-select class="SlectBox form-control custom-select" formControlNmae="status"
+                                        [ngClass]="{ 'error-control': formSubmitted && cf.status.errors }">
+                                        <!--placeholder-->
+                                        <ng-option value="">Pending</ng-option>
+                                        <ng-option value="">Approval</ng-option>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-panel>
+            </ngb-accordion>
+            <div class="pull-right">
+                <button type="button" class="btn btn-default">Clear</button>&nbsp;
+                <button type="button" class="btn btn-primary" (click)="submitClientDetail()">Submit</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- End Row-->
