@@ -1,0 +1,185 @@
+import { Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Location } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ValidationService } from 'services/validation.service';
+import { CommonService } from 'services/common.service';
+import { ApiResponse, Data } from 'models/api-response.model';
+import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-input';
+import { finalize } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { ClientsService } from '../services/clients.service';
+
+@Component({
+  selector: 'app-client-form',
+  templateUrl: './client-form.component.html',
+  styleUrls: ['./client-form.component.scss']
+})
+export class ClientFormComponent {
+  clientForm: FormGroup;
+  isLoading: boolean = false;
+  formSubmitted: boolean = false;
+
+  countryList = [];
+  selectedcountryiso=CountryISO.India;
+  countrySelected = 'in';
+
+  stateList;
+  stateSelected;
+  stateLoading = false;
+  
+  cityList;
+  citySelected;
+  cityLoading = false;
+  
+  zipcodeList = [];
+  zipcodeSelected='';
+
+	
+  separateDialCode = false;
+	SearchCountryField = SearchCountryField;
+	CountryISO = CountryISO;
+  CountryISOS = [CountryISO];
+  
+  countryName = Object.keys(CountryISO);  
+  countryCode = Object.values(CountryISO);  
+  
+
+	PhoneNumberFormat = PhoneNumberFormat;
+	preferredCountries: CountryISO[] = [CountryISO.UnitedStates,CountryISO.India, CountryISO.Canada];
+	phoneForm = new FormGroup({
+		phone: new FormControl(undefined, [Validators.required])
+	});
+  
+
+  constructor(private fb: FormBuilder,private location: Location,private comService: CommonService,private clService: ClientsService,private toastr:ToastrService) {
+
+  }
+  get cf() { return this.clientForm.controls; }
+
+  ngOnInit(): void {
+
+    this.clientForm = this.fb.group({
+      accountname: ['', Validators.required],
+      parentaccount: ['', Validators.required],
+      zipCode: ['', Validators.required],
+      country: ['', Validators.required],
+      state: ['', Validators.required],
+      city: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required, ValidationService.emailValidator],
+      workEmail: ['', Validators.required],
+      accountStatus: ['', Validators.required],
+      tag: ['', Validators.required],
+      note: ['', Validators.required],
+      lastEngagedOn: ['', Validators.required],
+      lastEngagedBy: ['', Validators.required],
+      documentName: ['', Validators.required],
+      createdBy: ['', Validators.required],
+      createdOn: ['', Validators.required],
+      approvedBy: ['', Validators.required],
+      approvedOn: ['', Validators.required],
+      status: ['', Validators.required],
+      userType: ['User'],
+      alternatePhone: [''],
+      alternateEmail: [''],
+      alternateworkEmail: [''],
+      accountManager: [''],
+      accountID: [''],
+     
+    });
+
+
+    const dtData= this.location.getState();
+    if(dtData){
+      //console.log(dtData['data']);
+    }
+   this.onCountryChange(this.countrySelected);
+    
+
+  }
+  onCountryChange(event:any): void  {
+    this.stateLoading = true;
+    this.stateSelected='';
+    const param={'countryCode':event};
+    this.comService.serviceGet("Common/GetStateByCountry/"+event,param).pipe(finalize(() => {
+      this.stateLoading = false;
+    })).subscribe(resp => {
+      this.stateList=resp['data'];
+    });  
+	}
+
+  onStateChange(event:any): void  {
+      this.cityLoading = true;
+      this.citySelected='';
+      const param={'countryCode':event.stateCode};
+      this.comService.serviceGet("Common/GetCityByState/"+event.stateCode,param).pipe(finalize(() => {
+        this.cityLoading = false;
+      })).subscribe(resp => {
+        this.zipcodeList=resp['data'];
+        this.cityList=this.zipcodeList;
+    });
+	}
+  onCityChange(event:any): void  {
+  }
+  debouncer: any;
+  onZipChange(event:any): void  {
+    this.stateList=[];
+    this.cityList=[];
+    this.stateSelected='';
+    this.citySelected='';
+    this.cityLoading=true;
+    this.stateLoading=true;
+    let selectedVal : any = event.target.value;
+    const param={'zipCode':selectedVal};
+    this.comService.serviceGet("Common/GetCountryStateCityByCityOrZipCode/"+selectedVal,param).pipe(
+      finalize(() => {
+        this.cityLoading=false;
+        this.stateLoading=false;
+       }),
+    ).subscribe(resp => {
+      if(resp['data']){
+        const str:Data=resp['data'];
+        this.countrySelected=str.countryCode.toLowerCase();
+        const stateArr ={stateCode: str.state.stateCode, stateName: str.state.stateName};
+        this.stateList=[stateArr];
+        //this.stateList.push({iso2: str.state.iso2, state: str.state.state});
+        this.stateSelected=str.state.stateCode;
+        const arr ={zipCode: str.state.city.zipCode, cityName: str.state.city.cityName};
+        this.cityList=[arr];
+        this.citySelected=str.state.city.cityName;
+      }      
+    });  
+  }
+
+  
+  submitClientDetail() {
+    this.formSubmitted = true;
+    if (this.clientForm.valid) {
+      this.formSubmitted = true;
+      this.isLoading = true;
+      var phone = this.clientForm.value.phone.number;
+      this.clientForm.value.phone = phone;
+      this.createClient(this.clientForm)
+      return;
+    }
+  }
+  createClient(objClient:any){
+    this.clService.createClients(objClient).subscribe({
+      next:(response:ApiResponse) =>{
+        if(response.isSuccess)
+        {
+          this.toastr.success("Candidate created successfully","Success");
+          console.log(response.data); 
+        }
+        else
+        {
+          this.toastr.error(response.errorMessage,"Error");
+        }
+      },
+      error:(err:HttpErrorResponse) =>{
+        console.log(err);
+      }
+    });
+  }
+}
