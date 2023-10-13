@@ -1,0 +1,810 @@
+    <div class="card bg-voilet">
+                                <div class="card-header pr_15">
+                                    <h4 class="card-title" style="width: 100%;">Open Task
+                                        <a class="text-dark pull-right" (click)="openTaskModal(task)" placement="bottom" ngbTooltip="Add Task">
+                                            <i class="fe fe-plus-circle cursor"></i></a>
+                                        <ng-template #task let-modal>
+                                            <!-- BASIC MODAL -->
+                                            <form  [formGroup]="taskForm" (ngSubmit)="addTask()">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="modal-basic-title">
+                                                        Task</h6>
+                                                    <button type="button" class="btn-close" aria-label="Close"
+                                                        (click)="closeTaskModal()">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Task Detail<sup
+                                                                class="text-danger">*</sup>
+                                                                <control-messages [control]="taskForm.controls.taskDetail"
+                                                                class="pull-right"></control-messages></label>
+                                                        <textarea formControlName="taskDetail" type="text"
+                                                            class="form-control" ></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn ripple btn-primary w_100"
+                                                         [disabled]="isTaskFormSubmitting">
+                                                        <i class="fa fa-spinner fa-spin" *ngIf="isTaskFormSubmitting"></i>&nbsp; Save</button>
+                                                    <button type="button" class="btn ripple btn-secondary"
+                                                        (click)="closeTaskModal()">Close</button>
+                                                </div>
+                                            </form>
+                                        </ng-template>
+                                        <ng-template #updateTask let-modal>
+                                            <!-- BASIC MODAL -->
+                                            <form  [formGroup]="updateTaskForm" (ngSubmit)="updateAssignTask()">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="modal-basic-title">
+                                                        Task</h6>
+                                                    <button type="button" class="btn-close" aria-label="Close"
+                                                        (click)="closeUpdateTaskModal()">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Task
+                                                            Status<sup class="text-danger">*</sup><control-messages [control]="updateTaskForm.controls.taskStatus"
+                                                            class="pull-right"></control-messages></label>
+                                                        <ng-select class="form-control custom-select" [(ngModel)]="selectedTaskStatus" placeholder="Select Status" formControlName="taskStatus" [readonly]="true">
+                                                            <ng-option value="Close">Close</ng-option>
+                                                            <ng-option value="Cancel">Cancel</ng-option>
+                                                        </ng-select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Description<sup
+                                                                class="text-danger">*</sup>
+                                                                <control-messages [control]="updateTaskForm.controls.taskDescription" 
+                                                                class="pull-right"></control-messages></label>
+                                                        <textarea formControlName="taskDescription" type="text" placeholder="Description"
+                                                            class="form-control" ></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn ripple btn-primary w_100"
+                                                         [disabled]="isUpdateTaskFormSubmitting">
+                                                        <i class="fa fa-spinner fa-spin" *ngIf="isUpdateTaskFormSubmitting"></i>&nbsp; Save</button>
+                                                    <button type="button" class="btn ripple btn-secondary"
+                                                        (click)="closeUpdateTaskModal()">Close</button>
+                                                </div>
+                                            </form>
+                                        </ng-template>
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                              
+                                        <div class="d-flex pt-3 border-0" *ngFor="let tsk of tasks">
+                                            <div class="me-xs-0" style="width:5%;">
+                                                <i class="fa fa-chevron-right note-icon text-primary"></i>
+                                            </div>
+                                            <div class="ms-1" style="width:70%;">
+                                                <div class="fs-14 mb-1">{{tsk.taskDetail}}</div>
+                                             </div>
+                                            <p class="float-end mb-0 pull-right text-end" style="width:25%;">
+                                                <a (click)="openUpdateTaskModal(updateTask,tsk,'Close')"><i class="feather feather-check text-success action-icon"></i></a>
+                                                <a (click)="openUpdateTaskModal(updateTask,tsk,'Cancel')"><i class="feather feather-trash-2 text-danger action-icon"></i></a>
+                                            </p>
+                                        </div>
+                                      
+            
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header pr_15">
+                                    <h4 class="card-title" style="width: 100%;">Notes
+                                        <span class="pull-right">
+                                        <a class="text-dark" style="margin-left: 10px; margin-top: -3px; float: right;" (click)="openNotesModal(notes)"><i class="fe fe-plus-circle cursor" placement="bottom" ngbTooltip="Add Note"></i></a>
+                                        <ng-template #notes let-modal>
+                                            <!-- BASIC MODAL -->
+                                            <form [formGroup]="notesForm" (ngSubmit)="addNotes()">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="modal-basic-title">
+                                                        Notes</h6>
+                                                    <button type="button" class="btn-close" aria-label="Close"
+                                                        (click)="closeNotesModal()">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Notes
+                                                            Type<sup class="text-danger">*</sup><control-messages [control]="notesForm.controls.noteType"
+                                                            class="pull-right"></control-messages></label>
+                                                        <ng-select class="form-control custom-select" formControlName="noteType" [(ngModel)]="selectedNoteType" placeholder="Select Type">
+                                                            <ng-option value="Public">Public</ng-option>
+                                                            <ng-option value="Private">Private</ng-option>
+                                                        </ng-select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label">Notes Detail<sup
+                                                                class="text-danger">*</sup><control-messages [control]="notesForm.controls.noteDetail"
+                                                                class="pull-right"></control-messages></label>
+                                                        <textarea formControlName="noteDetail" type="text"
+                                                            class="form-control" maxlength="250"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn ripple btn-primary w_100">
+                                                        Save</button>
+                                                    <button type="button" class="btn ripple btn-secondary"
+                                                        (click)="closeNotesModal()">Close</button>
+                                                </div>
+                                            </form>
+                                        </ng-template>
+
+                                        <span class="note_status" ngbDropdown><span ngbDropdownToggle><i
+                                                    class="fe fe-globe"></i> Public <i
+                                                    class="fe fe-chevron-down"></i></span>
+                                            <span ngbDropdownMenu class="bg-white box-shadow note_dropUlli" role="menu">
+                                                <ul>
+                                                    <li><a><i class="fe fe-globe"></i> Public</a>
+                                                    </li>
+                                                    <li><a><i class="fe fe-user"></i> Private</a>
+                                                    </li>
+                                                </ul>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group note-list-scroll">
+                                        <div class="list-group-item d-flex pt-3 pb-3 border-0" *ngFor="let note of notesList" >
+                                            <div class="me-3 me-xs-0">
+                                                <div class="calendar-icon icons">
+                                                    <div class="date_time bg-pink-transparent">
+                                                        <span class="date">{{note.createdAt | date:'d'}}</span>
+                                                        <span class="month">{{note.createdAt | date:'MMM'}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ms-1">
+                                                <div class="fs-14 mb-1">{{note.notesDetail}}</div>
+                                                <small class="text-muted">Posted by {{note.createdBy}}. {{note.createdAt | date:'shortTime'}}</small>
+                                            </div>
+                                        </div> 
+***********************************************************************ts
+ updateTaskModalRef: any;
+  notesModalRef: any;
+
+  ParamSub: any;
+  candidateId: string;
+  candidateDetail: CandidateDetail = new CandidateDetail();
+  activities: Activitiy[] = [];
+  attachments: Attachment[] = [];
+  tags: Tag[] = [];
+  candidateTags: Tag[] = [];
+  fileUploadForm: any;
+  file: File = null;
+  selectedDocumentType: any;
+  isFormSubmitting: boolean = false;
+  attachmentToRemove: Attachment;
+
+  jobAssignForm:any;
+  minSearchLength = environment.minSearchLength;
+  jobOpeningList$: Observable<any>;
+  jobOpeningSearchString$ = new Subject<string>();
+  isJobOpeningLoading = false;
+  selectedJobOpenings: any;
+  isJobAssignFormSubmitting: boolean = false;
+
+  applicationList: Application[] = [];
+  taskAction:string = 'add';
+  selectedTaskStatus:any;
+
+  docViewModalRef: any;
+  @ViewChild('docViewModel') docViewTemplate!: TemplateRef<any>;
+
+  viewer:string;
+  doc:string;
+
+  taskForm:any;
+  updateTaskForm:any;
+  isTaskFormSubmitting: boolean = false;
+  tasks:Task[]=[];
+  isUpdateTaskFormSubmitting:boolean = false;
+
+
+  notesForm:any;
+  isNotesFormSubmitting:boolean = false;
+  notesList:Note[]=[];
+  selectedNoteType:any;
+
+
+
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private commonService: CommonService,
+    private candidateService: CandidateService,
+    private modalService: NgbModal,
+    private toastr: ToastrService,
+    private applicationService:ApplicationService,
+    private router: Router
+  ) {
+    this.rating3 = 1;
+    this.form = this.fb.group({
+      rating1: ['', Validators.required],
+    });
+    this.ctrl = new FormControl(null, Validators.required);
+
+    this.fileUploadForm = this.fb.group({
+      documentType: ['', Validators.required],
+      document: ['', Validators.required],
+      description: ['']
+    });
+
+    this.jobAssignForm = this.fb.group({
+      jobopenings: ['', Validators.required],
+    })
+
+    this.taskForm = this.fb.group({
+      taskDetail: ['', Validators.required]
+    })
+
+    this.updateTaskForm = this.fb.group({
+      taskId: ['', Validators.required],
+      taskStatus: ['', Validators.required],
+      taskDescription: ['', Validators.required]
+    })
+
+    this.notesForm = this.fb.group({
+      noteType: ['', Validators.required],
+      noteDetail: ['', Validators.required]
+    })
+    
+  }
+
+  ngOnInit(): void {
+    this.ParamSub = this.route.params.subscribe((params) => {
+      this.candidateId = params['candidateId'];
+    });
+    this.getCandidateDetail(this.candidateId);
+    this.getCandidateActivities(this.candidateId);
+    this.getCandidateAttachments(this.candidateId);
+    setTimeout(() => {
+      this.getCandidateTag('Candidate');
+    }, 1000);
+    this.searchJob();
+    this.getActiveApplications(this.candidateId);
+    this.getTasks(this.candidateId);
+    this.getNotes(this.candidateId);
+  }
+
+
+  ratingDisplay!: number;
+
+  onRatingSet(rating: number): void {
+    this.ratingDisplay = rating;
+  }
+
+  toggle() {
+    if (this.ctrl.disabled) {
+      this.ctrl.enable();
+    } else {
+      this.ctrl.disable();
+    }
+  }
+  openJobOpeningModal(jobOpening: any) {
+    this.JobOpeningModalRef = this.modalService.open(jobOpening, { backdrop: 'static', size: 'md', keyboard: false, centered: false });
+  }
+  openCallModal(call: any) {
+    this.callModalRef = this.modalService.open(call);
+  }
+  openEmailModal(email: any) {
+    this.emailModalRef = this.modalService.open(email);
+  }
+  openSmsModal(sms: any) {
+    this.smsModalRef = this.modalService.open(sms);
+  }
+  openUploadModal(upload: any) {
+    this.uploadModalRef = this.modalService.open(upload);
+  }
+  openTaskModal(task: any) {
+    this.taskModalRef = this.modalService.open(task);
+  }
+  openUpdateTaskModal(updateTask: any,taskDetail:any,status:string) {
+    this.selectedTaskStatus = status;
+    this.updateTaskForm.patchValue({taskId:taskDetail.taskId})
+    this.updateTaskModalRef = this.modalService.open(updateTask);
+  }
+
+  openNotesModal(notes: any) {
+    this.notesModalRef = this.modalService.open(notes);
+  }
+
+  closeJobOpeningModal(jobOpening: any) {
+    this.jobAssignForm.reset();
+    this.isJobAssignFormSubmitting = false;
+    this.JobOpeningModalRef.close();
+  }
+  closeCallModal(call: any) {
+    this.callModalRef.close();
+  }
+  closeEmailModal(email: any) {
+    this.emailModalRef.close();
+  }
+  closeSmsModal(sms: any) {
+    this.smsModalRef.close();
+  }
+  closeUploadModal() {
+    this.fileUploadForm.reset();
+    this.uploadModalRef.close();
+  }
+  closeTaskModal() {
+    this.taskForm.reset();
+    this.taskModalRef.close();
+  }
+  closeUpdateTaskModal(){
+    this.updateTaskForm.reset();
+    this.updateTaskModalRef.close();
+  }
+  closeNotesModal() {
+    this.notesForm.reset();
+    this.notesModalRef.close();
+  }
+
+  searchJob() {
+    this.jobOpeningList$ = concat(
+      of([]), // default items
+      this.jobOpeningSearchString$.pipe(
+        filter(res => {
+          return res !== null && res.length >= this.minSearchLength
+        }),
+        distinctUntilChanged(),
+        debounceTime(1000),
+        tap(() => this.isJobOpeningLoading = true),
+        switchMap(term => {
+          return this.getJobList(term).pipe(
+            catchError(() => of([])),
+            tap(() => this.isJobOpeningLoading = false)
+          )
+        })
+      )
+    );
+  }
+
+  getJobList(searchText: string = null): Observable<any> {
+    return this.candidateService.searchJobForCandidate(this.candidateId, searchText).pipe(map(response => {
+      if (!response.isSuccess) {
+        throwError(response.errorMessage);
+      } else {
+        return response.data;
+      }
+    }));
+  }
+
+  jobTrackByFn(job: any) {
+    return job.jobId;
+  }
+
+  getCandidateDetail(candidateId: string) {
+    if (candidateId != undefined) {
+      this.candidateService.getCandidateDetail(candidateId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.candidateDetail = <CandidateDetail>response.data;
+            this.candidateTags = (this.candidateDetail.tag != undefined) ? JSON.parse(this.candidateDetail.tag) : [];
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+  }
+
+  getCandidateActivities(candidateId: string) {
+    if (candidateId != undefined) {
+      this.candidateService.getCandidateActivities(candidateId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.activities = <Activitiy[]>response.data;
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+  }
+
+  getCandidateAttachments(candidateId: string) {
+    if (candidateId != undefined) {
+      this.candidateService.getCandidateAttachments(candidateId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.attachments = <Attachment[]>response.data;
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+  }
+
+  onUploadChange(event) {
+    this.file = event.target.files[0];
+  }
+
+  uploadAttachment() {
+    this.fileUploadForm.markAllAsTouched();
+    if (this.fileUploadForm.valid) {
+      this.isFormSubmitting = true;
+      var fileDetail = this.fileUploadForm.value;
+      this.candidateService.uploadFile(this.candidateId, fileDetail.documentType, this.file, fileDetail.description).subscribe({
+        next: (response: ApiResponse) => {
+          this.isFormSubmitting = false;
+          if (response.isSuccess) {
+            this.closeUploadModal();
+            this.getCandidateAttachments(this.candidateId);
+            this.toastr.success('Attachment added successfully', 'Success');
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isFormSubmitting = false;
+          console.log(err);
+        },
+      });
+    }
+  }
+
+
+  openDocViewModel(attachment:Attachment){
+    if(attachment.attachmentUrl != undefined && attachment.attachmentType != '')
+    {
+      if(attachment.extension == 'pdf')
+      {
+        this.viewer = 'google';
+      }
+      else
+      {
+        this.viewer = 'office';
+      }
+
+      let baseUrl:string = environment.baseUrl;
+       baseUrl = baseUrl.replace(`api/v1/`,attachment.attachmentUrl);
+       this.doc = baseUrl;
+      this.docViewModalRef = this.modalService.open(this.docViewTemplate, { backdrop: 'static', size: 'xl', keyboard: false, centered: true });
+    }
+  }
+  closeDocViewModal(){
+     this.docViewModalRef.close();
+  }
+
+  confirmDelete(attachment: Attachment) {
+    this.attachmentToRemove = attachment;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Want to delete this attachment?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel'
+    }).then((confirm) => {
+      if (confirm.isConfirmed) {
+        this.removeAttachment(this.attachmentToRemove);
+      }
+      else if (confirm.isDismissed) {
+        this.attachmentToRemove = new Attachment();
+      }
+    })
+  }
+
+  removeAttachment(attachment: Attachment) {
+    if (attachment != undefined && attachment.attachmentId != undefined) {
+      this.candidateService.removeAttachment(attachment.attachmentId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.getCandidateAttachments(this.candidateId);
+            this.toastr.success('Attachment removed successfully', 'Success');
+          }
+          else {
+            this.toastr.error(response.errorMessage, "Error");
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  getCandidateTag(tagType: string) {
+    if (tagType != undefined) {
+      this.commonService.getTags(tagType).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.tags = <Tag[]>response.data;
+            this.candidateTags = (this.candidateDetail.tag != undefined) ? JSON.parse(this.candidateDetail.tag) : [];
+            this.candidateTags.forEach((e: Tag) => {
+              let etag = this.tags.find((t) => t.tagId == e.tagId);
+              let indetag = this.tags.indexOf(etag);
+              this.tags.splice(indetag, 1);
+            });
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+  }
+
+  addCandidateTag(tag: Tag) {
+    if (tag != undefined) {
+      this.candidateTags.push(tag);
+      let indtag = this.tags.indexOf(tag);
+      this.tags.splice(indtag, 1);
+      this.addTag(this.candidateId, this.candidateTags);
+    }
+  }
+
+  addTag(candidateId: string, tags: Tag[]) {
+    this.candidateService.addTag(candidateId, tags).subscribe({
+      next: (response: ApiResponse) => {
+        if (response.isSuccess) {
+          this.getCandidateDetail(this.candidateId);
+          setTimeout(() => {
+            this.getCandidateTag('Candidate');
+          }, 2000);
+          this.toastr.success('Tag added successfully', 'Success');
+        } else {
+          this.toastr.error(response.errorMessage, 'Error');
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        console.log(err);
+      },
+    });
+  }
+
+  assignJobToCandidate(){
+    this.jobAssignForm.markAllAsTouched();
+    if (this.jobAssignForm.valid) {
+      let objApplication: ApplicationForJob = new ApplicationForJob();
+      objApplication.candidateId = this.candidateId;
+      objApplication.jobIds = this.jobAssignForm.value.jobopenings;
+      this.addApplication(objApplication);
+    }
+  }
+
+  addApplication(objApplication: any) {
+    this.isJobAssignFormSubmitting = true;
+    this.applicationService.createApplicationForJob(objApplication).subscribe({
+      next: (response: ApiResponse) => {
+        this.isJobAssignFormSubmitting = false;
+        this.jobAssignForm.reset();
+        if (response.isSuccess) {
+          this.toastr.success("Application submitted successfully", "Success");
+          this.jobAssignForm.reset();
+          this.JobOpeningModalRef.close();
+          this.router.navigate(['/applications']);
+        }
+        else {
+          this.toastr.error(response.errorMessage, "Error");
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isJobAssignFormSubmitting = false;
+        this.jobAssignForm.reset();
+        console.log(err);
+      }
+    });
+  }
+
+  getActiveApplications(candidateId:string){
+    if(candidateId != undefined)
+    {
+        this.candidateService.getActiveApplications(candidateId).subscribe({
+          next: (response: ApiResponse) => {
+            if (response.isSuccess) {
+              this.applicationList = <Application[]>response.data;
+            } else {
+              this.toastr.error(response.errorMessage, 'Error');
+            }
+          },
+          error: (err: HttpErrorResponse) => {
+            console.log(err);
+          },
+        });
+    }
+  }
+
+  addTask(){
+    this.taskForm.markAllAsTouched();
+    if(this.taskForm.valid)
+    {
+      let taskDetail:Task = new Task();
+      taskDetail.taskFor = 'Candidate';
+      taskDetail.referenceId = this.candidateId;
+      taskDetail.taskStatus = 'Open';
+      taskDetail.taskDetail = this.taskForm.value.taskDetail;
+      this.isTaskFormSubmitting = true;
+      this.candidateService.addNewTask(taskDetail).subscribe({
+        next: (response: ApiResponse) => {
+          this.isTaskFormSubmitting = false;     
+          if (response.isSuccess) {
+            this.closeTaskModal();
+            this.toastr.success("Task saved successfully", "Success");
+            this.getTasks(this.candidateId);
+          }
+          else {
+            this.toastr.error(response.errorMessage, "Error");
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isTaskFormSubmitting = false;
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  updateAssignTask(){
+    debugger
+    this.updateTaskForm.markAllAsTouched();
+    if(this.updateTaskForm.valid)
+    {
+      let taskDetail:Task = new Task();
+      taskDetail.taskId = this.updateTaskForm.value.taskId;
+      taskDetail.taskStatus = this.updateTaskForm.value.taskStatus;
+      taskDetail.description = this.updateTaskForm.value.taskDescription;
+      taskDetail.referenceId = 'refid';
+      taskDetail.taskFor = 'taskfor';
+      taskDetail.taskDetail = 'taskdetail';
+      this.isUpdateTaskFormSubmitting = true;
+      this.candidateService.updateTask(taskDetail.taskId, taskDetail).subscribe({
+        next: (response: ApiResponse) => {
+          this.isUpdateTaskFormSubmitting = false;     
+          if (response.isSuccess) {
+            this.closeUpdateTaskModal();
+            this.toastr.success("Task updated successfully", "Success");
+            this.getTasks(this.candidateId);
+          }
+          else {
+            this.toastr.error(response.errorMessage, "Error");
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isUpdateTaskFormSubmitting = false;
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  getTasks(referenceId:string){
+    if(referenceId != undefined)
+    {
+      this.candidateService.getTasks(referenceId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.tasks = <Task[]>response.data;
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+
+  }
+
+  addNotes(){
+    debugger
+    this.notesForm.markAllAsTouched();
+    if(this.notesForm.valid){
+      let noteDetail:Note = new Note();
+      noteDetail.notesFor = 'Candidate';
+      noteDetail.referenceId = this.candidateId;
+      noteDetail.notesType = this.notesForm.value.noteType;
+      noteDetail.notesDetail = this.notesForm.value.noteDetail;
+      this.isNotesFormSubmitting = true;
+      this.candidateService.addNewNote(noteDetail).subscribe({
+        next: (response: ApiResponse) => {
+          this.isNotesFormSubmitting = false;     
+          if (response.isSuccess) {
+            this.closeNotesModal();
+            this.toastr.success("Task saved successfully", "Success");
+            this.getNotes(this.candidateId);
+          }
+          else {
+            this.toastr.error(response.errorMessage, "Error");
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          this.isNotesFormSubmitting = false;
+          console.log(err);
+        }
+      });
+    }
+  }
+
+  getNotes(referenceId:string){
+    if(referenceId != undefined)
+    {
+      this.candidateService.getNotes(referenceId).subscribe({
+        next: (response: ApiResponse) => {
+          if (response.isSuccess) {
+            this.notesList = <Note[]>response.data;
+          } else {
+            this.toastr.error(response.errorMessage, 'Error');
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
+        },
+      });
+    }
+
+  }
+}
+ candidate service++++++++++++++++++++++++++++++++++++++
+
+  updateTask(taskId:string, task: Task) { 
+    return this.http.put<ApiResponse>(this.baseUrl + `Task/UpdateTask/${taskId}`, task).pipe(catchError(this.handleError));
+  }
+
+  getTasks(referenceId: string) {
+    return this.http.get<ApiResponse>(this.baseUrl + `Task/GetTasks/${referenceId}`).pipe(catchError(this.handleError));
+  }
+
+  addNewNote(note: Note) {
+    return this.http.post<ApiResponse>(this.baseUrl + `Notes/CreateNote`, note).pipe(catchError(this.handleError));
+  }
+
+  getNotes(referenceId: string) {
+    return this.http.get<ApiResponse>(this.baseUrl + `Notes/GetNotes/${referenceId}`).pipe(catchError(this.handleError));
+  }
+}
+
+
+
+common model.ts
+
+++++++++++++++++++++++++++++++++++++++++++++
+xport class Task {
+  taskId: string;
+  taskFor: string;
+  referenceId: string;
+  taskStatus: string;
+  taskDetail: string;
+  description: string;
+  createdAt: Date;
+  createdBy: string;
+}
+
+export class Note {
+  notesFor: string;
+  referenceId: string;
+  notesType: string;
+  notesDetail: string;
+  description:string;
+  createdAt: Date;
+  createdBy: string;
+}
+
+export class StatusUpdate {
+  statusId: number;
+  description: string;
+}
